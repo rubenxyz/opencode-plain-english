@@ -9,6 +9,8 @@ It just stops talking to you like a compiler.
 answer in everyday words: full sentences, no jargon, no acronyms, no code in
 explanations. Works in the TUI and in `opencode run`.
 
+![plain mode in an opencode run](assets/demo.gif)
+
 ## Before and after
 
 Default agent:
