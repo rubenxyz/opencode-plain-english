@@ -1,45 +1,51 @@
-# plain — plain-English mode for opencode
+# plain
 
-A small opencode plugin that makes the assistant answer you in plain English:
-everyday words, full sentences, no jargon, no code in explanations. It is a
-from-scratch plugin inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
-(the "talk like a caveman" idea, inverted into "talk like a person").
+**Plain-English mode for [opencode](https://opencode.ai).**
 
-## What it does
+Your coding agent still writes the code, runs the commands, and does the work.
+It just stops talking to you like a compiler.
 
-While plain mode is on, the plugin injects a short ruleset into the system
-prompt before every request. It does not change the model, tools, or how code
-is written — only how the assistant talks to you.
+`plain` is a small, dependency-free opencode plugin that tells the assistant to
+answer in everyday words: full sentences, no jargon, no acronyms, no code in
+explanations. Works in the TUI and in `opencode run`.
 
-Rules in short:
+## Before and after
 
-- Everyday words, full sentences.
-- No jargon, no acronyms, no nerdspeak; uncertain terms get explained.
-- No code in replies. What it does, what changed, what to do next.
-- Accurate and complete; security and data-loss warnings stay explicit.
+Default agent:
+
+> A covering index is a denormalized access path that materializes the
+> projected columns into the leaf level of the B-tree, eliminating heap
+> fetches on index-only scans.
+
+With plain:
+
+> A covering index keeps copies of the columns you need right inside the
+> lookup list, so the database never has to open the table itself.
+
+Same facts, same accuracy. One of them you can read on a phone.
 
 ## Install
 
 ```bash
+git clone https://github.com/rubenxyz/plain.git
+cd plain
 ./install.sh
 ```
 
-This symlinks the plugin and the three command files into your opencode config
+The script symlinks everything into your opencode config
 (`~/.config/opencode`, or `$XDG_CONFIG_HOME/opencode`):
 
-- `plugins/plain.js` -> `src/plain.js`
-- `commands/plain.md`, `commands/plain-commit.md`, `commands/plain-review.md`
+| Repo file | Installed as |
+| --- | --- |
+| `src/plain.js` | `plugins/plain.js` |
+| `commands/plain.md` | `commands/plain.md` |
+| `commands/plain-commit.md` | `commands/plain-commit.md` |
+| `commands/plain-review.md` | `commands/plain-review.md` |
 
-Restart opencode, then use it. Any existing file at those paths is kept as a
-`.bak.<timestamp>` before linking.
+If a real file is already at one of those paths, it is kept as
+`.bak.<timestamp>` first. Restart opencode and you are done.
 
-Uninstall:
-
-```bash
-./install.sh --uninstall
-```
-
-## Usage
+## Use
 
 | Command | What it does |
 | --- | --- |
@@ -48,27 +54,64 @@ Uninstall:
 | `/plain-commit` | Draft a plain-English commit message for the staged changes |
 | `/plain-review` | Explain the current changes in plain English |
 
-Natural triggers work too: `talk in plain english`, `plain mode`,
-`plain english`, or `explain in plain english ...` turns it on; `stop plain`,
-`normal mode`, `plain off` turns it off. The phrase must be the first line of
-your message.
+You can also just say it. The first line of your message can be
+`talk in plain english`, `plain mode`, `plain english`, or
+`explain in plain english ...` to turn it on, and `stop plain`, `plain off`, or
+`normal mode` to turn it off.
 
 Plain mode is **on by default** at the start of every session. `/plain off`
-lasts until a new session starts. Turn the plugin off always by starting
-opencode with `PLAIN_DEFAULT=off` or by editing `defaultMode()` in
-`src/plain.js`.
+lasts until a new session begins.
+
+## The exact prompt
+
+While plain mode is on, this block is appended to the system prompt on every
+request:
+
+```
+PLAIN MODE ACTIVE
+
+Write every reply in plain English: everyday words, full sentences, no jargon or nerdspeak.
+
+- No code in replies. Say what it does and what changed in practical terms; show code only when asked.
+- Keep names exact, stay accurate, keep security and data-loss warnings explicit.
+
+Turn off with /plain off, "stop plain", or "normal mode".
+```
+
+The first line doubles as a marker, so the block is replaced in place instead
+of stacking up. Edit the `RULES` constant in `src/plain.js` to change it.
+
+## What it changes, and what it does not
+
+- Changes: how the assistant talks to you.
+- Does not change: the model, the tools, permissions, or the work itself.
+  Plain mode does not make the agent vague or slower, and it keeps file names,
+  commands, and warnings exact.
+
+## Configuration
+
+| Variable | Effect |
+| --- | --- |
+| `PLAIN_DEFAULT=off` | Start with plain mode off; toggle per session with `/plain` |
+| `PLAIN_DEBUG=1` | Log hook activity to `/tmp/plain-debug.log` |
 
 ## How it works
 
-- `src/plain.js` — the plugin. Hooks `event` (`session.created`), `chat.message`
-  (reads `/plain` and natural triggers), and `experimental.chat.system.transform`
-  (adds the ruleset when active, replacing an earlier copy instead of stacking).
-- `commands/*.md` — prompt templates; opencode loads them from
-  `~/.config/opencode/commands/`.
-- The on/off state is a flag file at `~/.config/opencode/.plain-active`.
+The plugin is around 150 lines of JavaScript with no dependencies:
 
-Troubleshooting: run opencode with `PLAIN_DEBUG=1` and check
-`/tmp/plain-debug.log`.
+- `event` (`session.created`) writes the on/off flag to
+  `~/.config/opencode/.plain-active`, resetting to the default each session.
+- `chat.message` reads your message for commands and natural triggers.
+- `experimental.chat.system.transform` adds the rules to the system prompt when
+  active, replacing an earlier copy rather than duplicating it.
+
+## Uninstall
+
+```bash
+./install.sh --uninstall
+```
+
+Removes the symlinks and the flag file. Restart opencode.
 
 ## Development
 
@@ -76,9 +119,16 @@ Troubleshooting: run opencode with `PLAIN_DEBUG=1` and check
 npm test
 ```
 
-The smoke test covers the trigger parser, the injection, and the plugin hooks.
+The smoke test covers the trigger parser, the prompt injection, and the plugin
+hooks.
+
+## Credits
+
+Inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman),
+which compresses the agent's speech to a caveman grunt. `plain` does the
+opposite, for people who want the explanation to land the first time. Not
+affiliated with that project.
 
 ## License
 
-MIT. Not affiliated with the caveman project; its opencode adapter was the
-design reference.
+MIT. See [LICENSE](LICENSE).

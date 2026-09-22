@@ -2,6 +2,18 @@
   "name": "plain-opencode-plugin",
   "version": "0.1.0",
   "description": "Plain-English communication mode plugin for opencode",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "plain-english",
+    "ai-agent",
+    "llm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rubenxyz/plain.git"
+  },
+  "homepage": "https://github.com/rubenxyz/plain#readme",
   "type": "module",
   "license": "MIT",
   "private": true,
