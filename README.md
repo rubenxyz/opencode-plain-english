@@ -27,8 +27,8 @@ Same facts, same accuracy. One of them you can read on a phone.
 ## Install
 
 ```bash
-git clone https://github.com/rubenxyz/opencode-plain.git
-cd opencode-plain
+git clone https://github.com/rubenxyz/opencode-plain-english.git
+cd opencode-plain-english
 ./install.sh
 ```
 
