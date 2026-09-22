@@ -1,4 +1,4 @@
-# plain
+# Plain English
 
 **Plain-English mode for [opencode](https://opencode.ai).**
 
