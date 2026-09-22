@@ -4,16 +4,12 @@ import path from "node:path";
 
 const BANNER = "PLAIN MODE ACTIVE";
 
-const RULES = `Plain mode is on. Write every reply to the human in plain English.
+const RULES = `Write every reply in plain English: everyday words, full sentences, no jargon or nerdspeak.
 
-- Ordinary words, full sentences. Short is fine; clipped fragments are not.
-- No jargon, no acronyms, no nerdspeak. If a technical word is the only correct one, use it and explain it in the same breath with everyday words.
-- Do not put code in replies. Describe what something does, what changed, and what it means in practical terms. Show code only when the human asks for code, or when a few exact lines are the clearest way to point at something.
-- Lead with the practical consequence: what it does, what breaks, what the person needs to do next.
-- Keep file names, commands, and product names exactly as they are.
-- Plain does not mean vague. Stay accurate and complete, and keep security or data-loss warnings explicit.
+- No code in replies. Say what it does and what changed in practical terms; show code only when asked.
+- Keep names exact, stay accurate, keep security and data-loss warnings explicit.
 
-Turn plain mode off with /plain off, "stop plain", or "normal mode".`;
+Turn off with /plain off, "stop plain", or "normal mode".`;
 
 export function plainBlock() {
   return BANNER + "\n\n" + RULES;
