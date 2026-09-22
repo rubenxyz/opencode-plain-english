@@ -76,6 +76,25 @@ test("system transform injects the rules once", () => {
   assert.match(empty[0], /PLAIN MODE ACTIVE/);
 });
 
+test("config hook registers the commands without clobbering overrides", async () => {
+  const hooks = await PlainPlugin();
+
+  const config = {};
+  await hooks.config(config);
+  assert.deepEqual(Object.keys(config.command).sort(), [
+    "plain",
+    "plain-commit",
+    "plain-review",
+  ]);
+  assert.match(config.command.plain.template, /\$ARGUMENTS/);
+  assert.ok(config.command["plain-commit"].description);
+
+  const preset = { command: { plain: { template: "custom" } } };
+  await hooks.config(preset);
+  assert.equal(preset.command.plain.template, "custom");
+  assert.equal(preset.command["plain-review"].template.includes("plain English"), true);
+});
+
 test("plugin hooks switch the mode and inject when active", async () => {
   const hooks = await PlainPlugin();
 

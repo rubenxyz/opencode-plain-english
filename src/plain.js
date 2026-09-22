@@ -15,6 +15,28 @@ export function plainBlock() {
   return BANNER + "\n\n" + RULES;
 }
 
+const COMMANDS = {
+  plain: {
+    description: "Turn plain mode on or off — /plain [on|off]",
+    template: "Plain mode request: $ARGUMENTS\n\nReply in one short plain-English sentence confirming whether plain mode is now on or off.",
+  },
+  "plain-commit": {
+    description: "Draft a plain-English commit message for the staged changes",
+    template: `Write a commit message for the staged changes in plain English.
+
+- Subject line: short and concrete, ordinary words. No type prefixes or scope tags.
+- Body: explain what changed and why in everyday language.
+- Do not paste the diff, file lists, or code.`,
+  },
+  "plain-review": {
+    description: "Review the current changes in plain English",
+    template: `Review the current changes and explain in plain English what they do.
+
+Point out real problems in practical terms: what breaks, what is risky, what will surprise someone later.
+No code, no jargon, no style nitpicks. Keep it short.`,
+  },
+};
+
 export function injectRules(system) {
   const block = plainBlock();
   for (let i = 0; i < system.length; i++) {
@@ -110,6 +132,14 @@ export const PlainPlugin = async () => {
   applyDefault();
 
   return {
+    config: async (config) => {
+      try {
+        if (!config.command || typeof config.command !== "object") config.command = {};
+        for (const [name, def] of Object.entries(COMMANDS)) {
+          if (!config.command[name]) config.command[name] = { ...def };
+        }
+      } catch {}
+    },
     event: async ({ event } = {}) => {
       if (event && event.type === "session.created") applyDefault();
     },
