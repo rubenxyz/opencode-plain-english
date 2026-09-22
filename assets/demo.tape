@@ -4,14 +4,18 @@
 Output assets/demo.gif
 Set Shell "bash"
 Set FontFamily "JetBrainsMono Nerd Font"
-Set FontSize 15
-Set Width 1000
-Set Height 400
-Set Padding 20
-Set Framerate 20
-Set TypingSpeed 40ms
+Set FontSize 14
+Set Width 1100
+Set Height 640
+Set Padding 16
+Set Framerate 15
+Set TypingSpeed 35ms
+Set PlaybackSpeed 1.5
 Set Theme "Catppuccin Mocha"
 
-Type 'opencode run "explain in plain english what a database index is, in one sentence"'
+Type 'opencode'
 Enter
-Sleep 15s
+Sleep 6s
+Type 'explain in one sentence what a database index is'
+Enter
+Sleep 30s
