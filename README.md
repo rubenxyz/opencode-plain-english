@@ -1,6 +1,7 @@
 # Plain English
 
-**Plain-English mode for [opencode](https://opencode.ai).**
+You might have heard of `/caveman`...
+`opencode-plain-english` makes OpenCode speak back to you in plain English.
 
 Your coding agent still writes the code, runs the commands, and does the work.
 It just stops talking to you like a compiler.
