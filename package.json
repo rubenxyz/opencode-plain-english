@@ -11,9 +11,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rubenxyz/plain.git"
+    "url": "git+https://github.com/rubenxyz/opencode-plain.git"
   },
-  "homepage": "https://github.com/rubenxyz/plain#readme",
+  "homepage": "https://github.com/rubenxyz/opencode-plain#readme",
   "type": "module",
   "license": "MIT",
   "private": true,
