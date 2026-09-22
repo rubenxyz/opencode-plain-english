@@ -136,6 +136,18 @@ npm test
 The smoke test covers the trigger parser, the prompt injection, and the plugin
 hooks.
 
+### Recording the demo
+
+The GIF at the top is recorded with [vhs](https://github.com/charmbracelet/vhs)
+and its `ttyd` dependency. From the repo root:
+
+```bash
+vhs assets/demo.tape
+```
+
+That replays the scripted session and rewrites `assets/demo.gif`. Edit
+`assets/demo.tape` to change the command, the font, or the timing.
+
 ## Credits
 
 Inspired by [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman),
