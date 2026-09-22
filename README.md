@@ -26,6 +26,18 @@ Same facts, same accuracy. One of them you can read on a phone.
 
 ## Install
 
+### From npm
+
+```bash
+opencode plugin opencode-plain-english
+```
+
+That installs the plugin and updates your config; the plugin registers
+`/plain`, `/plain-commit`, and `/plain-review` by itself. Restart opencode and
+you are done.
+
+### From git
+
 ```bash
 git clone https://github.com/rubenxyz/opencode-plain-english.git
 cd opencode-plain-english
