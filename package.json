@@ -1,0 +1,12 @@
+{
+  "name": "plain-opencode-plugin",
+  "version": "0.1.0",
+  "description": "Plain-English communication mode plugin for opencode",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "exports": "./src/plain.js",
+  "scripts": {
+    "test": "node --test test/smoke.mjs"
+  }
+}
