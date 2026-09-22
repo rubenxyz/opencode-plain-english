@@ -9,19 +9,21 @@ Set Width 1100
 Set Height 640
 Set Padding 16
 Set Framerate 15
-Set TypingSpeed 35ms
+Set TypingSpeed 80ms
 Set PlaybackSpeed 1.5
 Set Theme "Catppuccin Mocha"
 
 Type 'opencode'
 Enter
-Sleep 6s
-Type '/plain'
-Sleep 2s
+Sleep 7s
+Type '/'
+Sleep 3s
+Type 'plain'
+Sleep 3s
 Enter
-Sleep 1s
+Sleep 2s
 Enter
 Sleep 8s
 Type 'explain how a database index makes queries faster and when it slows writes down'
 Enter
-Sleep 30s
+Sleep 20s
