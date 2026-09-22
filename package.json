@@ -16,8 +16,13 @@
   "homepage": "https://github.com/rubenxyz/opencode-plain#readme",
   "type": "module",
   "license": "MIT",
-  "private": true,
   "exports": "./src/plain.js",
+  "files": [
+    "src",
+    "commands",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "test": "node --test test/smoke.mjs"
   }
