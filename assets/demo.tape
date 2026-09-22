@@ -16,6 +16,12 @@ Set Theme "Catppuccin Mocha"
 Type 'opencode'
 Enter
 Sleep 6s
-Type 'explain in one sentence what a database index is'
+Type '/plain'
+Sleep 2s
+Enter
+Sleep 1s
+Enter
+Sleep 8s
+Type 'explain how a database index makes queries faster and when it slows writes down'
 Enter
 Sleep 30s
