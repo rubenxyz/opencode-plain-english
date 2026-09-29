@@ -1,7 +1,7 @@
 {
   "name": "opencode-plain-english",
-  "version": "0.1.0",
-  "description": "Plain-English communication mode plugin for opencode",
+  "version": "0.2.0",
+  "description": "Plain-English communication mode plugin for opencode (OpenCode 1 and 2)",
   "keywords": [
     "opencode",
     "opencode-plugin",
@@ -16,7 +16,12 @@
   "homepage": "https://github.com/rubenxyz/opencode-plain-english#readme",
   "type": "module",
   "license": "MIT",
-  "exports": "./src/plain.js",
+  "exports": {
+    ".": "./src/plain.js",
+    "./server": "./src/server.js",
+    "./v1": "./src/plain.js",
+    "./v2": "./src/native.js"
+  },
   "files": [
     "src",
     "commands",

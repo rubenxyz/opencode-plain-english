@@ -2,7 +2,7 @@ import { appendFileSync, existsSync, mkdirSync, readFileSync, renameSync, unlink
 import os from "node:os";
 import path from "node:path";
 
-const BANNER = "PLAIN MODE ACTIVE";
+export const BANNER = "PLAIN MODE ACTIVE";
 
 const RULES = `Write every reply in plain English: everyday words, full sentences, no jargon or nerdspeak.
 
@@ -15,7 +15,7 @@ export function plainBlock() {
   return BANNER + "\n\n" + RULES;
 }
 
-const COMMANDS = {
+export const COMMANDS = {
   plain: {
     description: "Turn plain mode on or off — /plain [on|off]",
     template: "Plain mode request: $ARGUMENTS\n\nReply in one short plain-English sentence confirming whether plain mode is now on or off.",
@@ -61,7 +61,7 @@ function opencodeConfigDir() {
 
 const flagPath = path.join(opencodeConfigDir(), ".plain-active");
 
-function defaultMode() {
+export function defaultMode() {
   return (process.env.PLAIN_DEFAULT || "on").toLowerCase() === "off" ? "off" : "on";
 }
 
@@ -86,7 +86,7 @@ export function setActive(on) {
   } catch {}
 }
 
-function debug(message) {
+export function debug(message) {
   if (process.env.PLAIN_DEBUG !== "1") return;
   try {
     appendFileSync("/tmp/plain-debug.log", new Date().toISOString() + " " + message + "\n");
