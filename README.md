@@ -8,7 +8,8 @@ It just stops talking to you like a compiler.
 
 `plain` is a small, dependency-free opencode plugin that tells the assistant to
 answer in everyday words: full sentences, no jargon, no acronyms, no code in
-explanations. Works in the TUI and in `opencode run`.
+explanations. Works in the TUI and in `opencode run`, on OpenCode 1.x and
+OpenCode 2.x.
 
 ![plain mode in an opencode run](assets/demo.gif)
 
@@ -29,15 +30,29 @@ Same facts, same accuracy. One of them you can read on a phone.
 
 ## Install
 
-### From npm
+One package serves both OpenCode majors. It advertises a `server` entrypoint
+(the OpenCode 1.x plugin contract) and a `setup` entrypoint (the OpenCode 2
+contract), so the same version installs on either.
+
+### OpenCode 2
+
+OpenCode 2 installs plugins from npm specs and reads them from the native
+`plugins` key in `opencode.json`:
 
 ```bash
-opencode plugin opencode-plain-english
+opencode plugin add opencode-plain-english
 ```
 
-That installs the plugin and updates your config; the plugin registers
-`/plain`, `/plain-commit`, and `/plain-review` by itself. Restart opencode and
-you are done.
+Or add it to `~/.config/opencode/opencode.json` yourself:
+
+```json
+{
+  "plugins": ["opencode-plain-english"]
+}
+```
+
+The plugin registers `/plain`, `/plain-commit`, and `/plain-review` by itself.
+Restart OpenCode and you are done.
 
 ### From git
 
@@ -47,18 +62,11 @@ cd opencode-plain-english
 ./install.sh
 ```
 
-The script symlinks everything into your opencode config
-(`~/.config/opencode`, or `$XDG_CONFIG_HOME/opencode`):
-
-| Repo file | Installed as |
-| --- | --- |
-| `src/plain.js` | `plugins/plain.js` |
-| `commands/plain.md` | `commands/plain.md` |
-| `commands/plain-commit.md` | `commands/plain-commit.md` |
-| `commands/plain-review.md` | `commands/plain-review.md` |
-
-If a real file is already at one of those paths, it is kept as
-`.bak.<timestamp>` first. Restart opencode and you are done.
+`./install.sh` installs the OpenCode 2 entrypoint by default and symlinks
+`src/server.js` to `~/.config/opencode/plugins/opencode-plain-english.js`.
+Pass `--v1` to install the legacy OpenCode 1.x entrypoint plus the markdown
+command bridge instead. If a real file is already at one of those paths, it is
+kept as `.bak.<timestamp>` first. Restart OpenCode and you are done.
 
 ## Use
 
@@ -112,13 +120,23 @@ of stacking up. Edit the `RULES` constant in `src/plain.js` to change it.
 
 ## How it works
 
-The plugin is around 150 lines of JavaScript with no dependencies:
+The plugin is around 230 lines of JavaScript with no dependencies. It keeps the
+same behaviour on both OpenCode majors by mapping the old hooks onto the
+OpenCode 2 domains:
 
-- `event` (`session.created`) writes the on/off flag to
-  `~/.config/opencode/.plain-active`, resetting to the default each session.
-- `chat.message` reads your message for commands and natural triggers.
-- `experimental.chat.system.transform` adds the rules to the system prompt when
-  active, replacing an earlier copy rather than duplicating it.
+| OpenCode 1.x hook | OpenCode 2 domain |
+| --- | --- |
+| `config(config)` | `context.command.transform` (`.add(...)`) |
+| `event({event})` on `session.created` | `context.event.subscribe(...)` |
+| `chat.message(_input, output)` | `context.session.hook("prompt", ...)` |
+| `experimental.chat.system.transform` | `context.session.hook("context", ...)` |
+| `~/.config/opencode/.plain-active` | `context.storage` key `plain-active` |
+
+On OpenCode 2 the on/off flag lives in OpenCode's own storage under the
+`plain-active` key; on OpenCode 1.x (and in the tests) it stays in the
+`.plain-active` file. Either way the first line of your message is scanned for
+commands and natural triggers, and the rules block is added to the system
+prompt when active, replacing an earlier copy rather than duplicating it.
 
 ## Uninstall
 
@@ -134,8 +152,9 @@ Removes the symlinks and the flag file. Restart opencode.
 npm test
 ```
 
-The smoke test covers the trigger parser, the prompt injection, and the plugin
-hooks.
+The smoke test covers the trigger parser, the prompt injection, the V1 hooks,
+and the OpenCode 2 wiring (command transform, session prompt/context hooks,
+event subscription, and storage).
 
 ### Recording the demo
 
